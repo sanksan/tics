@@ -1,5 +1,8 @@
 package org.tics.seat;
 
+/**
+ * Denotes a particular seat. Holds the row and seat position in the row.
+ */
 public class SeatInfo {
 
     int row;

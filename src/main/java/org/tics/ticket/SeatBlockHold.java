@@ -4,6 +4,10 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Structure for internal seat block hold for a request. This differs from the SeatHold structure as it is used to
+ * hold the block of seats and is internal in nature.
+ */
 public class SeatBlockHold {
     private int holdId;
     private List<SeatBlock> seatBlocks;

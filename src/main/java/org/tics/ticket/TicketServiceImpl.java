@@ -12,16 +12,35 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Ticket service implementation to hold and reserve tickets.
+ * ### Hold/expiry:-
+ * The ticket holds are queued up in min heap using the hold's expiry timestamp.
+ * The service implementation holds a timer that runs in predefined interval (default: 1 second) to clean up the expired holds.
+ * The expired entries, if any, would be at the top of the min heap and could be easily found and released them to the availability pool.
+ * The scheduled timer is started at service instantiation time and on each run, the heap's entries is examined and removed if expired.
+ * <p>
+ * ### Seat allocation:-
+ * The seat allocation algorithm picks the first available block of seats that are adjacent to each other.
+ * If it couldn't find a contiguous block, it tries to split into multiple blocks starting the next lowest number than requested.
+ * If required seats could not be allocated, they would be released.
+ * <p>
+ * ### Seat reservation using hold:-
+ * The seat reservation operation uses the hold id and removes the hold from the hold queue.
+ * If the hold is valid/active, a reservation id is returned. If it couldn't be found, null is returned.
+ */
 public class TicketServiceImpl implements TicketService {
 
     private Timer cleanExpHoldTimer;
     private int holdPeriod;//milliseconds
 
     private AtomicInteger freeSeats;
+    //(Min heap - expiry timestamp) - added on hold; expired entries cleaned up by scheduled timer
     private PriorityBlockingQueue<SeatBlockHold> holdQueue;
+    //(Map of block size to available seat blocks)
     private Map<Integer, List<SeatBlock>> availMap;
 
-    private Map<String, SeatBlockHold> reservedSeats = new HashMap<>();
+    private Map<String, SeatBlockHold> reservedSeats;
 
     private HoldIdGenerator holdIdGenerator;
     private ReservationIdGenerator resIdGenerator;
@@ -61,7 +80,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     public void scheduleCleanExpiredHolds() {
-        System.out.println(String.format("scheduling cleanExpHoldTimer every %s milliseconds to clean up expired holds", holdPeriod));
+//        System.out.println(String.format("scheduling cleanExpHoldTimer every %s milliseconds to clean up expired holds", holdPeriod));
         cleanExpHoldTimer = new Timer();
         cleanExpHoldTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -94,11 +113,6 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public SeatHold findAndHoldSeats(int numSeats, String customerEmail) {
-        if(numSeats <= 0 || customerEmail != null || customerEmail.isEmpty())
-            return new SeatHold(customerEmail,
-                    numSeats,
-                    new ErrorInfo("INVALID_INPUT", "The numSeats/customerEmail is invalid. Please check and try again"));
-
         SeatHold hold = null;
         SeatBlock seatBlock = null;
         List<SeatBlock> seatBlocks = new ArrayList<>();

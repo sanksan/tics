@@ -9,16 +9,18 @@ Implementation mechanisms such as disk-based storage, a REST API, and a front-en
 
 
 ## Solution approach
-The solution to this problem splits the concerns into separate package/classes. Each class is built to focus on one 
-concern and is open for extension. 
-
-The service implementation 
+The details to the ticket service implementation is described below.  
 
 ### Data structures
 
-Available Seat counter - (AtomicInteger) - gets updated on ticket hold and hold expiry.
-Ticket Hold - 			 (Min heap - expiry timestamp) - added on hold; expired entries cleaned up by scheduled timer 
-Available Seat pool - (Map of block size to available seatBlock blocks) - 
+1. Ticket Hold area (Min heap) 
+    - A hold will be added to the min heap on successful reservation hold. The min heap stores objects based on its 
+    expiration timestamp. The expired entries cleaned up by scheduled timer on periodic intervals.
+2. Available Seat pool (Map (block size -> seat blocks))
+    - Stored as map of block size to available seatBlock blocks. For example a venue layout of 2 X 5, will store the available 
+    blocks as 5 : (Row 1, starting col 1), (Row 2, starting col 1). 
+3. Available Seat counter (AtomicInteger) 
+    - gets updated on ticket hold and hold expiry.
 
 ### Hold/expiry:-
  The ticket holds are queued up in min heap using the hold's expiry timestamp. The service implementation holds a timer
@@ -34,7 +36,7 @@ Available Seat pool - (Map of block size to available seatBlock blocks) -
  
 ### Seat reservation using hold:-
  The seatBlock reservation operation uses the hold id and removes the hold from the hold queue. If the hold is valid/active,
-  a reservation id is returned. If it couldn't be found, null is returned. 
+  a reservation id is returned. If the hold couldn't be found, null is returned. 
  
     
 ## Error Handling
@@ -55,14 +57,27 @@ The service implementation is accompanied by a Junit test to test the hold/reser
 
 ## Sample input/output 
 ```
-Test input:
-Venue: 2 5
-Hold 2
-Reserve 2
-Hold 10
- 
-Test Output:
-Hold id : 1
+[REPL]Listening for commands. Valid commands include. 
+Venue: RowCount ColumnCount HoldPeriod.
+Hold: NumSeats Emailid.
+Reserve: HoldId Emailid.
+Example:
+Venue: 2 5 30000
+Hold: 2 todd@email.com
+Reserve: 1 todd@email.com
+Hold: 10 ryan@email.com
+Venue: 2 5 30000
+Available seats: 10
+Hold: 2 todd@email.com
+Hold status:SeatHold{holdId=1, numSeats=2, seats=[SeatInfo{row=1, col=1}, SeatInfo{row=1, col=2}], customerEmail='todd@email.com', expirationTime=2018-05-05T03:23:55.589Z, errorInfo=null}
+Available seats: 8
+Reserve: 1 todd@email.com
+Reservation status:2283c58b-f222-430e-92cd-e1a04bc84e5f
+Available seats: 8
+Hold: 12 todd@email.com
+Hold status:SeatHold{holdId=0, numSeats=0, seats=null, customerEmail='todd@email.com', expirationTime=null, errorInfo=ErrorInfo{errorCode='NOT_AVAILABLE', errorMessage='The requested seats could not be allocated'}}
+Available seats: 8
+
 ```
 
 ## Build/deployment steps

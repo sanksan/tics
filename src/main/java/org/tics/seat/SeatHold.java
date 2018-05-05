@@ -4,6 +4,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * DTO for the result of a reservation hold request.
+ */
 public class SeatHold {
     private int holdId;
     private int numSeats;

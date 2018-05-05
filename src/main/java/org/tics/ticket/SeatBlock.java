@@ -1,5 +1,8 @@
 package org.tics.ticket;
 
+/**
+ * Structure an available or allocated seat block for a customer
+ */
 public class SeatBlock {
 
     int row;

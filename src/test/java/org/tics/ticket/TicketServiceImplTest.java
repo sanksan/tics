@@ -16,7 +16,6 @@ public class TicketServiceImplTest {
         SeatHold hold = impl.findAndHoldSeats(2, "a@a.com");
         assertEquals(N*M-2, impl.numSeatsAvailable());
         assertNotNull(impl.reserveSeats(hold.getHoldId(), "a@a.com"));
-//        System.out.println(impl.reserveSeats(hold.getHoldId(), "a@a.com"));
         assertEquals(N*M-2, impl.numSeatsAvailable());
     }
 

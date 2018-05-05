@@ -10,31 +10,12 @@ import java.util.Scanner;
 public class Solution {
 
     public static void main(String[] args) {
-
-       /* int N = 2, M = 5;
-        TicketServiceImpl impl = new TicketServiceImpl(N, M);
-        assert(N*M == impl.numSeatsAvailable());
-        for(int i=0;i<N*2;i++) {
-            SeatHold hold = impl.findAndHoldSeats(2, "a@a.com");
-            assert(N * M - (i+1)*2 == impl.numSeatsAvailable());
-            assert(null != impl.reserveSeats(hold.getHoldId(), "a@a.com"));
-//        System.out.println(impl.reserveSeats(hold.holdId, "a@a.com"));
-            assert(N * M - (i+1)*2 == impl.numSeatsAvailable());
-        }
-        SeatHold hold = impl.findAndHoldSeats(2, "a@a.com");
-        assert(null != hold);
-        assert(0 == impl.numSeatsAvailable());
-        hold = impl.findAndHoldSeats(1, "a@a.com");
-        assert(null != hold);
-        assert(0 == impl.numSeatsAvailable());
-        impl.turnOffSchedule();*/
         Solution solution = new Solution();
         solution.printUsage();
         solution.doFromCommandLine();
     }
 
     public void doFromCommandLine() {
-//        TicketServiceFactory factory = TicketServiceFactory.getDefault();
         Scanner scanner = new Scanner(System.in);
         String[] exitKeywords = new String[] {"quit", "exit", "bye"};
         List<String> exitKeywordsList = Arrays.asList(exitKeywords);
@@ -58,11 +39,11 @@ public class Solution {
                         System.out.println("Available seats: "+ service.numSeatsAvailable());
                         break;
                     case "hold:":
-                        System.out.println(service.findAndHoldSeats(Integer.parseInt(tkns[1]), tkns[2]));
+                        System.out.println("Hold status:" + service.findAndHoldSeats(Integer.parseInt(tkns[1]), tkns[2]));
                         System.out.println("Available seats: "+ service.numSeatsAvailable());
                         break;
                     case "reserve:":
-                        System.out.println(service.reserveSeats(Integer.parseInt(tkns[1]), tkns[2]));
+                        System.out.println("Reservation status:" + service.reserveSeats(Integer.parseInt(tkns[1]), tkns[2]));
                         System.out.println("Available seats: "+ service.numSeatsAvailable());
                         break;
                 }

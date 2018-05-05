@@ -2,6 +2,9 @@ package org.tics.util;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Generator for reservation hold id.
+ */
 public class HoldIdGenerator {
 
     private AtomicInteger lastHoldId;
