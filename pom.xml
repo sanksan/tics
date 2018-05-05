@@ -52,10 +52,6 @@
                 <version>1.2.1</version>
                 <configuration>
                     <mainClass>org.tics.solutions.Solution</mainClass>
-                   <!-- <arguments>
-                        <argument>&#45;&#45;inputFile</argument>
-                        <argument>src\test\resources\testinput.txt</argument>
-                    </arguments>-->
                 </configuration>
             </plugin>
         </plugins>

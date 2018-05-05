@@ -93,5 +93,5 @@ mvn exec:java
 ```
 
 Option 2:
-Kindly execute the `main` method in the `org.tics.ticket.solutions.Solution` class from your IDE.
+Kindly execute the `main` method in the `org.tics.solutions.Solution` class from your IDE.
 
