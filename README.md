@@ -1,12 +1,4 @@
-# Solution for Ticket Service
-
-# Requirements
-The ticket service implementation should be written in Java
-The solution and tests should build and execute entirely via the command line using either Maven or Gradle as the build tool
-A README file should be included in your submission that documents your assumptions and includes instructions for building the
-solution and executing the tests
-Implementation mechanisms such as disk-based storage, a REST API, and a front-end GUI are not required
-
+# Ticket Service
 
 ## Solution approach
 The details to the ticket service implementation is described below.  
