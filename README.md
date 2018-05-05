@@ -69,6 +69,7 @@ Available seats: 8
 Hold: 12 todd@email.com
 Hold status:SeatHold{holdId=0, numSeats=0, seats=null, customerEmail='todd@email.com', expirationTime=null, errorInfo=ErrorInfo{errorCode='NOT_AVAILABLE', errorMessage='The requested seats could not be allocated'}}
 Available seats: 8
+bye
 
 ```
 
